@@ -10,7 +10,13 @@ const TorrentPlayer = ({ magnetUrl, onClose }) => {
       
       client.add(magnetUrl, torrent => {
         // Torrent est prêt à être streamé
-        const file = torrent.files.find(file => file.name.endsWith('.mp4'));
+        const file = torrent.files.find(file => 
+            file.name.endsWith('.mp4') 
+            || file.name.endsWith('.mkv') 
+            || file.name.endsWith('.webm') 
+            || file.name.endsWith('.avi')
+        );
+
         if (file) {
           file.appendTo(playerRef.current); // Affiche la vidéo dans l'élément référencé
         }

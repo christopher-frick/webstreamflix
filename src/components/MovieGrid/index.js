@@ -12,6 +12,7 @@ function MovieGrid({ movies }) {
 
   return (
     <div className="row">
+      {showPlayer && <TorrentPlayer magnetUrl={currentMagnet} onClose={() => setShowPlayer(false)} />}
       {movies.map(movie => (
         <div key={movie.id} className="col-sm-6 col-md-4 col-lg-3 mb-4">
           <div className="card h-100"> {/* Utilisez h-100 pour que toutes les cartes aient la même hauteur */}
@@ -26,7 +27,7 @@ function MovieGrid({ movies }) {
           </div>
         </div>
       ))}
-      {showPlayer && <TorrentPlayer magnetUrl={currentMagnet} onClose={() => setShowPlayer(false)} />}
+      
     </div>
   );
 }
