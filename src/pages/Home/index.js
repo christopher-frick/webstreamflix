@@ -15,6 +15,7 @@ function Home() {
       // Remplacez 'URL_DE_VOTRE_FONCTION_SERVERLESS' par l'URL de votre fonction serverless
       // si dev est en cours d'exécution, utilisez http://localhost:3000/api/search_movies?movie_name=${query}
       // si vous utilisez Vercel, utilisez https://votre-app.vercel.app/api/search_movies?movie_name=${query}
+
       const response = await fetch(`/api/search_movies?movie_name=${query}`);
       if (!response.ok) throw new Error('Erreur réseau');
       const data = await response.json();
