@@ -13,14 +13,10 @@ function Home() {
     
     try {
       // Remplacez 'URL_DE_VOTRE_FONCTION_SERVERLESS' par l'URL de votre fonction serverless
-      // si dev est en cours d'exécution, utilisez http://localhost:3000/api/search_movies?movie_name=${query}
-      // si vous utilisez Vercel, utilisez https://votre-app.vercel.app/api/search_movies?movie_name=${query}
-
-      const response = await fetch(`/api/search_movies?movie_name=${query}`);
+      const response = await fetch(`https://webstreamflix.vercel.app/api/search_movies?name=${query}`);
       if (!response.ok) throw new Error('Erreur réseau');
       const data = await response.json();
       
-      // Mettez à jour l'état avec les résultats de la recherche
       setMovies(data.map((movie, index) => ({
         id: index, // Utilisez un identifiant unique pour chaque film, l'index peut servir si l'API ne retourne pas d'ID
         title: movie.title,
