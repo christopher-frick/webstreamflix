@@ -6,12 +6,15 @@ import './styles.css';
 
 function Home() {
   const [movies, setMovies] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   // Fonction pour gérer la recherche
   const handleSearch = async (query) => {
     console.log("Recherche pour:", query);
     
+    
     try {
+      setIsLoading(true);
       // Remplacez 'URL_DE_VOTRE_FONCTION_SERVERLESS' par l'URL de votre fonction serverless
       const response = await fetch(`https://webstreamflix.vercel.app/api/search_movies?name=${query}`);
       if (!response.ok) throw new Error('Erreur réseau');
@@ -30,6 +33,8 @@ function Home() {
       })));
     } catch (error) {
       console.error("Erreur lors de la recherche de films:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -38,7 +43,7 @@ function Home() {
       <Navbar />
       <h1 className="text-center mt-3">Bienvenue sur WebStreamFlix</h1>
       <SearchBar onSearch={handleSearch} />
-      <MovieGrid movies={movies} />
+      {isLoading ? <p>Chargement...</p> : <MovieGrid movies={movies} />}
     </div>
   );
 }

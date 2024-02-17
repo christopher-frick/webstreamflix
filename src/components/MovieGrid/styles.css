@@ -1,0 +1,14 @@
+.card-img-top {
+    width: 100%; /* Assurez-vous que l'image couvre la largeur */
+    height: 200px; /* Fixez une hauteur pour que toutes les images soient uniformes */
+  }
+  
+  .card {
+    display: flex;
+    flex-direction: column; /* Fait en sorte que le contenu de la carte s'aligne verticalement */
+  }
+  
+  .card-body {
+    flex: 1; /* Permet au corps de la carte de remplir l'espace disponible */
+  }
+  

@@ -24,7 +24,7 @@ class handler(BaseHTTPRequestHandler):
             
             for tr in all_tr:
                 seeders_el = tr.select_one('td:nth-child(4) > span')
-                leechers_el = tr.select_one('td:nth-child(5) > span')
+                leechers_el = tr.select_one('td:nth-child(5)')
                 size_el = tr.select_one('td:nth-child(3)')
                 title_el = tr.select_one('td:nth-child(1) > a')
                 magnet_link_el = None
