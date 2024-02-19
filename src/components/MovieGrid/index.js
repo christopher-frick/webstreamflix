@@ -6,6 +6,7 @@ function MovieGrid({ movies }) {
   const [showPlayer, setShowPlayer] = useState(false);
 
   const handlePlay = (magnetUrl) => {
+    console.log('handlePlay appelé avec :', magnetUrl);
     setCurrentMagnet(magnetUrl);
     setShowPlayer(true);
   };
