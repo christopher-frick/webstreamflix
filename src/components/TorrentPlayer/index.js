@@ -12,6 +12,18 @@ function TorrentPlayer ({ magnetUrl, onClose }) {
       console.log('Téléchargement du torrent:', demoTorrentId);
       console.log('magnetUrl:', torrentId);
 
+      client.add(demoTorrentId, function (torrent) {
+        console.log('Torrent File:', torrent.files);
+        const file = torrent.files.find(function (file) {
+          
+          return (file.name.endsWith('.mp4') ||
+                  file.name.endsWith('.mkv') ||
+                  file.name.endsWith('.avi') ||
+                  file.name.endsWith('.webm') 
+          );
+        })
+        file.appendTo('#display')
+      })
       client.add(torrentId, function (torrent) {
         console.log('Torrent File:', torrent.files);
         const file = torrent.files.find(function (file) {
@@ -22,14 +34,15 @@ function TorrentPlayer ({ magnetUrl, onClose }) {
                   file.name.endsWith('.webm') 
           );
         })
-
         // Display the file by adding it to the DOM. Supports video, audio, image, etc. files
         file.appendTo('#display')
       })
 
 
       const torrent = client.get(torrentId);
+      const torrentDemo = client.get(demoTorrentId);
       console.log("torrent: ", torrent);
+      console.log("torrentDemo: ", torrentDemo);
       client.on('error', err => console.error('Erreur WebTorrent client:', err));
       torrent.on('error', err => console.error('Erreur Torrent:', err));
 
