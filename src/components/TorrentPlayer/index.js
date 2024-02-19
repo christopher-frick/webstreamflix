@@ -24,9 +24,17 @@ function TorrentPlayer ({ magnetUrl, onClose }) {
 
       const torrent = client.get(torrentId);
       console.log("torrent: ", torrent);
+      client.on('error', err => console.error('Erreur WebTorrent client:', err));
+      torrent.on('error', err => console.error('Erreur Torrent:', err));
 
       return () => {
-        client.destroy();
+        if (client.torrents.length) {
+          console.log("Suppression de tous les torrents");
+          client.torrents.forEach(torrent => client.remove(torrent));
+        } else {
+          console.log("Destruction du client WebTorrent");
+          client.destroy();
+        }
       };
     } else {
       console.error("WebTorrent n'est pas disponible.");
@@ -34,7 +42,7 @@ function TorrentPlayer ({ magnetUrl, onClose }) {
   }, [magnetUrl]);
 
   return (
-    <div>
+    <div id="torrentPlayer">
       <div id="torrent"></div>
       <button onClick={onClose}>Fermer</button>
     </div>
