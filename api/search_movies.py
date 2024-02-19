@@ -46,10 +46,10 @@ class handler(BaseHTTPRequestHandler):
                     'title': title_el['title'] if title_el else "N/A",
                     'img_link': img_link_el,
                     'detail_url': detail_url,
-                    'seeders': seeders_el.text if seeders_el else "N/A",
-                    'leechers': leechers_el.text if leechers_el else "N/A",
+                    'seeders': seeders_el.text.strip() if seeders_el else "N/A",
+                    'leechers': leechers_el.text.strip() if leechers_el else "N/A",
                     'size': size_el.text if size_el else "N/A",
-                    'magnet_link': magnet_link_el['href'] if magnet_link_el else "N/A",
+                    'magnet_link': magnet_link_el['href'].strip() if magnet_link_el else "N/A",
                     'description': description_el.text.strip() if description_el else "N/A"
                 })
 
