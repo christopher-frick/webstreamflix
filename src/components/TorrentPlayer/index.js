@@ -1,18 +1,34 @@
 import React, { useEffect } from 'react';
 
 function TorrentPlayer({ magnetUrl, onClose }) {
-  useEffect(() => {
-    // Cette partie du code initialise le SDK de Webtor.io
-    const script = document.createElement('script');
-    script.src = 'https://cdn.jsdelivr.net/npm/@webtor/embed-sdk-js/dist/index.min.js';
-    script.async = true;
-    document.body.appendChild(script);
+  // Déplacer la déclaration ici pour rendre `playerElementId` accessible dans tout le composant
+  const playerElementId = 'display';
 
-    script.onload = () => {
-      // Configuration du SDK pour intégrer le lecteur vidéo
+  useEffect(() => {
+    const scriptId = 'webtor-sdk-script';
+
+    // Supprimez cette ligne car `playerElementId` est maintenant déclaré à l'extérieur
+    // const playerElementId = 'display';
+
+    // Vérifie si le script a déjà été chargé
+    if (!document.getElementById(scriptId)) {
+      const script = document.createElement('script');
+      // Accès au script via un chemin absolu par rapport à la racine du site
+      script.src = '/libs/webtor-io-embed-sdk-js/index.min.js';
+      script.id = scriptId;
+      script.async = true;
+      // Attache l'événement onload au script avant de l'ajouter au document
+      script.onload = () => initWebtor();
+      document.body.appendChild(script);
+    } else {
+      // Si le script est déjà chargé, initialise Webtor immédiatement
+      initWebtor();
+    }
+
+    function initWebtor() {
       window.webtor = window.webtor || [];
       window.webtor.push({
-        id: 'player', // Assurez-vous que cet ID correspond à l'ID de votre div pour le lecteur
+        id: playerElementId,
         magnet: magnetUrl,
         on: function(e) {
           if (e.name === window.webtor.TORRENT_FETCHED) {
@@ -22,20 +38,29 @@ function TorrentPlayer({ magnetUrl, onClose }) {
             console.error('Torrent error!');
           }
         },
-        // Vous pouvez ajouter d'autres configurations ici
       });
+    }
+
+    const cleanUpPreviousContent = () => {
+      const playerElement = document.getElementById(playerElementId);
+      if (playerElement) {
+        while (playerElement.firstChild) {
+          playerElement.removeChild(playerElement.firstChild);
+        }
+      }
     };
 
+    cleanUpPreviousContent();
+
     return () => {
-      // Nettoyez le script lors du démontage du composant
-      document.body.removeChild(script);
+      cleanUpPreviousContent();
+      // Optionnellement, nettoyer le script chargé s'il n'est plus nécessaire
     };
-  }, [magnetUrl]); // S'exécute à chaque fois que magnetUrl change
+  }, [magnetUrl]);
 
   return (
     <div>
-      {/* Div où le lecteur sera intégré */}
-      <div id="player"></div>
+      <div id={playerElementId}></div>
       <button onClick={onClose}>Fermer</button>
     </div>
   );

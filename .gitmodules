@@ -1,0 +1,3 @@
+[submodule "libs/webtor-io-embed-sdk-js"]
+	path = libs/webtor-io-embed-sdk-js
+	url = https://github.com/webtor-io/embed-sdk-js.git
