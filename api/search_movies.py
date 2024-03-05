@@ -7,8 +7,9 @@ import json
 import redis
 import os
 
-# Initialize Redis client
-redis_client = redis.Redis(host=os.environ['REDIS_HOST'], port=os.environ['REDIS_PORT'], password=os.environ['REDIS_PASSWORD'])
+# Initialize Redis client using URL
+redis_url = os.getenv("KV_URL")  # Ensure you've added KV_URL to your Vercel environment variables
+redis_client = redis.from_url(redis_url)
 
 class handler(BaseHTTPRequestHandler):
 
