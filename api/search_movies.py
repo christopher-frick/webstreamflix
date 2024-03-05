@@ -42,21 +42,31 @@ class handler(BaseHTTPRequestHandler):
                     if img_el:  # Check if img element exists
                         img_link_el = base_url + img_el['src']  # Use 'src' attribute for images
 
-                movies_info.append({
-                    'title': title_el['title'] if title_el else "N/A",
-                    'img_link': img_link_el,
-                    'detail_url': detail_url,
-                    'seeders': seeders_el.text.strip() if seeders_el else "N/A",
-                    'leechers': leechers_el.text.strip() if leechers_el else "N/A",
-                    'size': size_el.text if size_el else "N/A",
-                    'magnet_link': magnet_link_el['href'].strip() if magnet_link_el else "N/A",
-                    'description': description_el.text.strip() if description_el else "N/A"
-                })
+                # seeders in a int
+                seeders_el = int(seeders_el.text.strip()) if seeders_el else 0
+                # leechers in a int
+                leechers_el = int(leechers_el.text.strip()) if leechers_el else 0
+                
+                if seeders_el > 0:
+                    movies_info.append({
+                        'title': title_el['title'] if title_el else "N/A",
+                        'img_link': img_link_el,
+                        'detail_url': detail_url,
+                        'seeders': seeders_el,
+                        'leechers': leechers_el,
+                        'size': size_el.text if size_el else "N/A",
+                        'magnet_link': magnet_link_el['href'].strip() if magnet_link_el else "N/A",
+                        'description': description_el.text.strip() if description_el else "N/A",
+                        'ratio': round(seeders_el / leechers_el, 2) if leechers_el > 0 else 0
+                    })
 
             self.send_response(200)
             self.send_header('Content-type', 'application/json')
             self.send_header('Access-Control-Allow-Origin', '*')
             self.end_headers()
+            # reorder movies_info ration from high to low
+            movies_info = sorted(movies_info, key=lambda x: x['ratio'], reverse=True)
+            
             self.wfile.write(json.dumps(movies_info, indent=4).encode())
         except Exception as e:
             self.send_response(500)
