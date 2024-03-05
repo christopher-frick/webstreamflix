@@ -16,7 +16,7 @@ function Home() {
     try {
       setIsLoading(true);
       // Remplacez 'URL_DE_VOTRE_FONCTION_SERVERLESS' par l'URL de votre fonction serverless
-      const response = await fetch(`https://${VERCEL_URL}/api/search_movies?name=${query}`);
+      const response = await fetch(`https://webstreamflix.vercel.app/api/search_movies?name=${query}`);
       if (!response.ok) throw new Error('Erreur réseau');
       const data = await response.json();
       
