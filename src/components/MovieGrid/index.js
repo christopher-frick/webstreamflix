@@ -20,7 +20,7 @@ function MovieGrid({ movies }) {
           <img src={movie.poster} className="card-img-top" alt={movie.title} style={{ objectFit: 'contain', width: '100%', height: '200px' }} />
             <div className="card-body d-flex flex-column"> {/* Utilisez flex-column pour aligner les éléments en colonne */}
               <h5 className="card-title">{movie.title}</h5>
-              <p className="card-text"><small>Seeders: {movie.seeders.trim()}</small></p>
+              <p className="card-text"><small>Seeders: {movie.seeders}</small></p>
               <p className="card-text"><small>Leechers: {movie.leechers}</small></p>
               <p className="card-text"><small>Size: {movie.size}</small></p>
               <p className="card-text"><small>Ratio: {movie.ratio}</small></p>
