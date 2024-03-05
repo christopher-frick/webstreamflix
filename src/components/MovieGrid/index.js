@@ -25,7 +25,6 @@ function MovieGrid({ movies }) {
               <p className="card-text"><small>Size: {movie.size}</small></p>
               <p className="card-text"><small>Ratio: {movie.ratio}</small></p>
               <button onClick={() => handlePlay(movie.magnetUrl)} className="btn btn-primary">Play</button>
-              /* Ajoutez un bouton pour le lien magnet */
               <button onClick={() => window.open(movie.magnetUrl, '_blank')} className="btn btn-danger">Magnet</button>
             </div>
           </div>
