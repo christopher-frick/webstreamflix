@@ -20,8 +20,11 @@ function Home() {
       if (!response.ok) throw new Error('Erreur réseau');
       const data = await response.json();
       
+      //setMoviees order by movie.ratio from high to low 
+      data.sort((a, b) => parseFloat(b.ratio) - parseFloat(a.ratio));
+
       setMovies(data.map((movie, index) => ({
-        id: index, // Utilisez un identifiant unique pour chaque film, l'index peut servir si l'API ne retourne pas d'ID
+        id: index,
         title: movie.title,
         poster: movie.img_link,
         detailUrl: movie.detail_url,
