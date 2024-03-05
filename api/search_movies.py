@@ -4,6 +4,11 @@ from urllib import parse
 import requests
 from bs4 import BeautifulSoup
 import json
+import redis
+import os
+
+# Initialize Redis client
+redis_client = redis.Redis(host=os.environ['REDIS_HOST'], port=os.environ['REDIS_PORT'], password=os.environ['REDIS_PASSWORD'])
 
 class handler(BaseHTTPRequestHandler):
 
@@ -16,7 +21,19 @@ class handler(BaseHTTPRequestHandler):
         base_url = "https://torrent9.to"
         search_url = f"{base_url}/search_torrent/films/{movie_name.replace(' ', '-')}.html"
         movies_info = []
+        cache_key = f"movie_info_{movie_name}"
 
+        # Try to get cached response
+        cached_response = redis_client.get(cache_key)
+        if cached_response:
+            # Send cached response if available
+            self.send_response(200)
+            self.send_header('Content-type', 'application/json')
+            self.send_header('Access-Control-Allow-Origin', '*')
+            self.end_headers()
+            self.wfile.write(cached_response)
+            return
+        
         try:
             response = requests.get(search_url)
             soup = BeautifulSoup(response.content, 'html.parser')
@@ -66,7 +83,8 @@ class handler(BaseHTTPRequestHandler):
             self.end_headers()
             # reorder movies_info ration from high to low
             movies_info = sorted(movies_info, key=lambda x: x['ratio'], reverse=True)
-            
+            # Cache the new result
+            redis_client.setex(cache_key, 604800, json.dumps(movies_info))  # 604800 seconds = 1 week
             self.wfile.write(json.dumps(movies_info, indent=4).encode())
         except Exception as e:
             self.send_response(500)
