@@ -83,7 +83,6 @@ class handler(BaseHTTPRequestHandler):
             # reorder movies_info ration from high to low
             movies_info = sorted(movies_info, key=lambda x: x['ratio'], reverse=True)
             # Cache the new result
-            redis_client.setex(cache_key, 604800, json.dumps(movies_info))  # 604800 seconds = 1 week
             self.wfile.write(json.dumps(movies_info, indent=4).encode())
         except Exception as e:
             self.send_response(500)
