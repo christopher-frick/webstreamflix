@@ -4,12 +4,6 @@ from urllib import parse
 import requests
 from bs4 import BeautifulSoup
 import json
-import redis
-import os
-
-# Initialize Redis client using URL
-#redis_url = os.getenv("KV_URL")  # Ensure you've added KV_URL to your Vercel environment variables
-#redis_client = redis.from_url(redis_url)
 
 class handler(BaseHTTPRequestHandler):
 
@@ -22,17 +16,7 @@ class handler(BaseHTTPRequestHandler):
         base_url = "https://torrent9.to"
         search_url = f"{base_url}/search_torrent/films/{movie_name.replace(' ', '-')}.html"
         movies_info = []
-        cache_key = f"movie_info_{movie_name}"
 
-        # Try to get cached response
-        #cached_response = redis_client.get(cache_key)
-        #if cached_response:
-            # Send cached response if available
-        self.send_response(200)
-        self.send_header('Content-type', 'application/json')
-        self.send_header('Access-Control-Allow-Origin', '*')
-        self.end_headers()
-        
         try:
             response = requests.get(search_url)
             soup = BeautifulSoup(response.content, 'html.parser')
@@ -82,7 +66,7 @@ class handler(BaseHTTPRequestHandler):
             self.end_headers()
             # reorder movies_info ration from high to low
             movies_info = sorted(movies_info, key=lambda x: x['ratio'], reverse=True)
-            # Cache the new result
+            
             self.wfile.write(json.dumps(movies_info, indent=4).encode())
         except Exception as e:
             self.send_response(500)
