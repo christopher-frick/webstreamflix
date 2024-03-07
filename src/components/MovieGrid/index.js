@@ -9,6 +9,7 @@ function MovieGrid({ movies }) {
     console.log('handlePlay appelé avec :', magnetUrl);
     setCurrentMagnet(magnetUrl);
     setShowPlayer(true);
+    document.getElementById('display').scrollIntoView({ behavior: 'smooth' });
   };
 
   return (

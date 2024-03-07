@@ -8,8 +8,8 @@ import redis
 import os
 
 # Initialize Redis client using URL
-redis_url = os.getenv("KV_URL")  # Ensure you've added KV_URL to your Vercel environment variables
-redis_client = redis.from_url(redis_url)
+#redis_url = os.getenv("KV_URL")  # Ensure you've added KV_URL to your Vercel environment variables
+#redis_client = redis.from_url(redis_url)
 
 class handler(BaseHTTPRequestHandler):
 
@@ -25,15 +25,13 @@ class handler(BaseHTTPRequestHandler):
         cache_key = f"movie_info_{movie_name}"
 
         # Try to get cached response
-        cached_response = redis_client.get(cache_key)
-        if cached_response:
+        #cached_response = redis_client.get(cache_key)
+        #if cached_response:
             # Send cached response if available
-            self.send_response(200)
-            self.send_header('Content-type', 'application/json')
-            self.send_header('Access-Control-Allow-Origin', '*')
-            self.end_headers()
-            self.wfile.write(cached_response)
-            return
+        self.send_response(200)
+        self.send_header('Content-type', 'application/json')
+        self.send_header('Access-Control-Allow-Origin', '*')
+        self.end_headers()
         
         try:
             response = requests.get(search_url)
